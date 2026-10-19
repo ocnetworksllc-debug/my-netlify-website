@@ -27,11 +27,28 @@
             color: var(--text-main);
             line-height: 1.5;
             padding: 0 2rem;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Interactive Cursor Follower Glow */
+        .cursor-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(244, 63, 94, 0.12) 0%, rgba(10, 10, 12, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+            z-index: 9999;
         }
 
         .container {
             max-width: 1000px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
 
         /* Editorial Header */
@@ -76,7 +93,7 @@
             color: var(--text-main);
         }
 
-        /* Hero Section with Heavy Editorial Typography */
+        /* Hero Section */
         .hero {
             margin-bottom: 6rem;
         }
@@ -112,7 +129,7 @@
             line-height: 1.6;
         }
 
-        /* Projects / Works Section */
+        /* Projects Section */
         .section-title {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.85rem;
@@ -194,6 +211,9 @@
 </head>
 <body>
 
+    <!-- Cursor Follower Element -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+
     <div class="container">
         <header>
             <a href="#" class="logo">oc_networks<span>.llc</span></a>
@@ -237,6 +257,34 @@
             <div>Available for projects: <a href="mailto:ocnetworksllc@gmail.com">Get in touch</a></div>
         </footer>
     </div>
+
+    <script>
+        // Smooth cursor tracking animation
+        const cursorGlow = document.getElementById('cursorGlow');
+        
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let currentX = mouseX;
+        let currentY = mouseY;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            // Smooth lagging effect for fluid motion
+            currentX += (mouseX - currentX) * 0.1;
+            currentY += (mouseY - currentY) * 0.1;
+
+            cursorGlow.style.left = `${currentX}px`;
+            cursorGlow.style.top = `${currentY}px`;
+
+            requestAnimationFrame(animateCursor);
+        }
+
+        animateCursor();
+    </script>
 
 </body>
 </html>
