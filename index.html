@@ -3,227 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OC Networks LLC | Interactive Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>OC Networks LLC — Infrastructure & Systems</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #050507;
-            --surface: #121217;
-            --text-primary: #f4f4f5;
-            --text-secondary: #a1a1aa;
+            --bg: #0a0a0c;
+            --surface: #121216;
+            --text-main: #ededef;
+            --text-muted: #71717a;
             --border: #27272a;
+            --accent: #f43f5e;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: var(--bg);
-            color: var(--text-primary);
-            overflow: hidden; /* Keeps items contained to a draggable canvas */
-            width: 100vw;
-            height: 100vh;
-            position: relative;
+            color: var(--text-main);
+            line-height: 1.5;
+            padding: 0 2rem;
         }
 
-        /* Fixed Minimalist Header */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Editorial Header */
         header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 2.5rem 3rem;
-            z-index: 1000;
-            pointer-events: none; /* Allows clicking through empty space */
-        }
-
-        header a, header .logo {
-            pointer-events: auto; /* Re-enables clicking on links */
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 5rem;
         }
 
         .logo {
-            font-weight: 600;
-            font-size: 1.1rem;
-            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--text-main);
             text-decoration: none;
-            letter-spacing: -0.01em;
+            letter-spacing: -0.02em;
+        }
+
+        .logo span {
+            color: var(--accent);
         }
 
         nav {
             display: flex;
-            gap: 2.5rem;
+            gap: 2rem;
         }
 
         nav a {
-            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
             text-decoration: none;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             transition: color 0.2s;
         }
 
         nav a:hover {
-            color: var(--text-primary);
+            color: var(--text-main);
         }
 
-        /* Interactive Draggable Canvas Area */
-        .canvas {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            cursor: grab;
+        /* Hero Section with Heavy Editorial Typography */
+        .hero {
+            margin-bottom: 6rem;
         }
 
-        .canvas:active {
-            cursor: grabbing;
+        .hero-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            display: block;
         }
 
-        /* Draggable Cards / Portfolio Elements */
-        .draggable-card {
-            position: absolute;
+        .hero h1 {
+            font-size: clamp(2.8rem, 6vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+        }
+
+        .hero h1 span {
+            color: var(--text-muted);
+        }
+
+        .hero-desc {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        /* Projects / Works Section */
+        .section-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 6rem;
+        }
+
+        .project-card {
             background-color: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            width: 260px;
-            height: 180px;
+            border-radius: 8px;
+            padding: 2.5rem 2rem;
+            text-decoration: none;
+            color: inherit;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            cursor: grab;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            /* Initial random-ish placement values handled via inline style or JS */
+            min-height: 220px;
+            transition: border-color 0.2s, transform 0.2s;
         }
 
-        .draggable-card:active {
-            cursor: grabbing;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+        .project-card:hover {
             border-color: #3f3f46;
-            z-index: 999;
+            transform: translateY(-3px);
         }
 
-        .card-title {
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        .card-tag {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
+        .project-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
-        /* Center brand watermark text like the reference site */
-        .watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: clamp(3rem, 8vw, 7rem);
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.03);
-            pointer-events: none;
-            text-align: center;
-            letter-spacing: -0.03em;
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-top: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        footer a {
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            footer {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <a href="#" class="logo">OC Networks LLC</a>
-        <nav>
-            <a href="#work">Works</a>
-            <a href="mailto:ocnetworksllc@gmail.com">Contact</a>
-        </nav>
-    </header>
+    <div class="container">
+        <header>
+            <a href="#" class="logo">oc_networks<span>.llc</span></a>
+            <nav>
+                <a href="#work">Work</a>
+                <a href="mailto:ocnetworksllc@gmail.com">Contact</a>
+            </nav>
+        </header>
 
-    <div class="watermark">oc networks.</div>
+        <main>
+            <section class="hero">
+                <span class="hero-tag">// Infrastructure & Engineering</span>
+                <h1>Ideas deserve <span>robust execution.</span></h1>
+                <p class="hero-desc">Building resilient network architectures, enterprise hardware deployments, and secure systems with absolute focus on performance and reliability.</p>
+            </section>
 
-    <div class="canvas" id="canvas">
-        <!-- Draggable Interactive Elements -->
-    <div class="draggable-card" style="top: 22vh; left: 25vw;" data-x="0" data-y="0">
-            <span class="card-tag">Infrastructure</span>
-            <div class="card-title">Project Showcase 01</div>
-        </div>
+            <div id="work" class="section-title">Selected Works ('26)</div>
 
+            <div class="projects-grid">
+                <a href="#" class="project-card">
+                    <span class="project-meta">Infrastructure</span>
+                    <div class="project-title">Project Showcase 01</div>
+                </a>
+                <a href="#" class="project-card">
+                    <span class="project-meta">Hardware</span>
+                    <div class="project-title">Edge Node Deploy 02</div>
+                </a>
+                <a href="#" class="project-card">
+                    <span class="project-meta">Networking</span>
+                    <div class="project-title">Topology Map 03</div>
+                </a>
+                <a href="#" class="project-card">
+                    <span class="project-meta">Operations</span>
+                    <div class="project-title">Field Systems 04</div>
+                </a>
+            </div>
+        </main>
 
-        <div class="draggable-card" style="top: 55vh; left: 25vw;" data-x="0" data-y="0">
-            <span class="card-tag">Hardware</span>
-            <div class="card-title">Edge Node Deploy 02</div>
-        </div>
-
-        <div class="draggable-card" style="top: 30vh; left: 60vw;" data-x="0" data-y="0">
-            <span class="card-tag">Networking</span>
-            <div class="card-title">Topology Map 03</div>
-        </div>
-
-        <div class="draggable-card" style="top: 60vh; left: 65vw;" data-x="0" data-y="0">
-            <span class="card-tag">Operations</span>
-            <div class="card-title">Field Systems 04</div>
-        </div>
+        <footer>
+            <div>oc networks llc. all rights reserved.</div>
+            <div>Available for projects: <a href="mailto:ocnetworksllc@gmail.com">Get in touch</a></div>
+        </footer>
     </div>
-
-    <script>
-        // Simple drag-and-drop mechanics for the portfolio cards
-        const cards = document.querySelectorAll('.draggable-card');
-
-        cards.forEach(card => {
-            let isDragging = false;
-            let startX, startY;
-            let currentX = 0;
-            let currentY = 0;
-
-            card.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                startX = e.clientX - currentX;
-                startY = e.clientY - currentY;
-                card.style.zIndex = 1000;
-            });
-
-            window.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                currentX = e.clientX - startX;
-                currentY = e.clientY - startY;
-                card.style.transform = `translate(${currentX}px, ${currentY}px)`;
-            });
-
-            window.addEventListener('mouseup', () => {
-                isDragging = false;
-                card.style.zIndex = 1;
-            });
-
-            // Touch support for mobile/tablets
-            card.addEventListener('touchstart', (e) => {
-                isDragging = true;
-                startX = e.touches[0].clientX - currentX;
-                startY = e.touches[0].clientY - currentY;
-                card.style.zIndex = 1000;
-            });
-
-            window.addEventListener('touchmove', (e) => {
-                if (!isDragging) return;
-                currentX = e.touches[0].clientX - startX;
-                currentY = e.touches[0].clientY - startY;
-                card.style.transform = `translate(${currentX}px, ${currentY}px)`;
-            }, { passive: true });
-
-            window.addEventListener('touchend', () => {
-                isDragging = false;
-                card.style.zIndex = 1;
-            });
-        });
-    </script>
 
 </body>
 </html>
