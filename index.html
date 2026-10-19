@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OC Networks LLC | Interactive Portfolio</title>
+    <title>OC Networks LLC | Cyber Interactive Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #050507;
-            --surface: #121217;
+            --bg: #030305;
+            --surface: rgba(18, 18, 23, 0.75);
             --text-primary: #f4f4f5;
             --text-secondary: #a1a1aa;
-            --border: #27272a;
+            --border: rgba(255, 255, 255, 0.08);
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.35);
         }
 
         * {
@@ -25,10 +27,21 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
             color: var(--text-primary);
-            overflow: hidden; /* Keeps items contained to a draggable canvas */
+            overflow: hidden;
             width: 100vw;
             height: 100vh;
             position: relative;
+        }
+
+        /* Canvas for Particle Grid Animation */
+        #fx-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
         }
 
         /* Fixed Minimalist Header */
@@ -42,11 +55,11 @@
             align-items: center;
             padding: 2.5rem 3rem;
             z-index: 1000;
-            pointer-events: none; /* Allows clicking through empty space */
+            pointer-events: none;
         }
 
         header a, header .logo {
-            pointer-events: auto; /* Re-enables clicking on links */
+            pointer-events: auto;
         }
 
         .logo {
@@ -55,6 +68,7 @@
             color: var(--text-primary);
             text-decoration: none;
             letter-spacing: -0.01em;
+            text-shadow: 0 0 20px var(--accent-glow);
         }
 
         nav {
@@ -66,11 +80,12 @@
             color: var(--text-secondary);
             text-decoration: none;
             font-size: 0.95rem;
-            transition: color 0.2s;
+            transition: color 0.2s, text-shadow 0.2s;
         }
 
         nav a:hover {
-            color: var(--text-primary);
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent-glow);
         }
 
         /* Interactive Draggable Canvas Area */
@@ -78,67 +93,78 @@
             width: 100%;
             height: 100%;
             position: relative;
-            cursor: grab;
+            z-index: 10;
         }
 
-        .canvas:active {
-            cursor: grabbing;
-        }
-
-        /* Draggable Cards / Portfolio Elements */
+        /* Draggable Cards / Portfolio Elements with Glassmorphism */
         .draggable-card {
             position: absolute;
-            background-color: var(--surface);
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            width: 260px;
-            height: 180px;
+            border-radius: 16px;
+            padding: 1.8rem;
+            width: 280px;
+            height: 190px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
             cursor: grab;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            /* Initial random-ish placement values handled via inline style or JS */
+            transition: border-color 0.3s, box-shadow 0.3s;
+            will-change: transform;
+        }
+
+        .draggable-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 25px var(--accent-glow);
         }
 
         .draggable-card:active {
             cursor: grabbing;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
-            border-color: #3f3f46;
-            z-index: 999;
         }
 
         .card-title {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 500;
             color: var(--text-primary);
         }
 
         .card-tag {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
+            font-size: 0.75rem;
+            color: var(--accent);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
+            font-weight: 600;
         }
 
-        /* Center brand watermark text like the reference site */
+        /* Ambient Pulsing Watermark */
         .watermark {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: clamp(3rem, 8vw, 7rem);
+            font-size: clamp(3rem, 10vw, 9rem);
             font-weight: 300;
-            color: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.015);
             pointer-events: none;
             text-align: center;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.04em;
+            z-index: 2;
+            animation: pulseGlow 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0.5; text-shadow: 0 0 20px rgba(56,189,248,0); }
+            100% { opacity: 1; text-shadow: 0 0 60px rgba(56,189,248,0.15); }
         }
     </style>
 </head>
 <body>
+
+    <!-- Interactive Particle Background FX -->
+    <canvas id="fx-canvas"></canvas>
 
     <header>
         <a href="#" class="logo">OC Networks LLC</a>
@@ -152,78 +178,188 @@
 
     <div class="canvas" id="canvas">
         <!-- Draggable Interactive Elements -->
-    <div class="draggable-card" style="top: 22vh; left: 25vw;" data-x="0" data-y="0">
-            <span class="card-tag">Infrastructure</span>
+        <div class="draggable-card" style="top: 22vh; left: 22vw;" data-x="0" data-y="0">
+            <span class="card-tag">// Infrastructure</span>
             <div class="card-title">Project Showcase 01</div>
         </div>
 
-
-        <div class="draggable-card" style="top: 55vh; left: 25vw;" data-x="0" data-y="0">
-            <span class="card-tag">Hardware</span>
+        <div class="draggable-card" style="top: 55vh; left: 28vw;" data-x="0" data-y="0">
+            <span class="card-tag">// Hardware</span>
             <div class="card-title">Edge Node Deploy 02</div>
         </div>
 
-        <div class="draggable-card" style="top: 30vh; left: 60vw;" data-x="0" data-y="0">
-            <span class="card-tag">Networking</span>
+        <div class="draggable-card" style="top: 28vh; left: 60vw;" data-x="0" data-y="0">
+            <span class="card-tag">// Networking</span>
             <div class="card-title">Topology Map 03</div>
         </div>
 
-        <div class="draggable-card" style="top: 60vh; left: 65vw;" data-x="0" data-y="0">
-            <span class="card-tag">Operations</span>
+        <div class="draggable-card" style="top: 58vh; left: 62vw;" data-x="0" data-y="0">
+            <span class="card-tag">// Operations</span>
             <div class="card-title">Field Systems 04</div>
         </div>
     </div>
 
     <script>
-        // Simple drag-and-drop mechanics for the portfolio cards
+        // --- 1. INTERACTIVE PARTICLE & GLOW NETWORK FX ---
+        const canvas = document.getElementById('fx-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let particles = [];
+        let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2, radius: 150 };
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.density = (Math.random() * 20) + 5;
+            }
+            update() {
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                let forceDirectionX = dx / distance;
+                let forceDirectionY = dy / distance;
+                let maxDistance = mouse.radius;
+                let force = (maxDistance - distance) / maxDistance;
+                let directionX = forceDirectionX * force * this.density;
+                let directionY = forceDirectionY * force * this.density;
+
+                if (distance < mouse.radius) {
+                    this.x -= directionX;
+                    this.y -= directionY;
+                } else {
+                    if (this.x !== this.baseX) {
+                        let dx = this.x - this.baseX;
+                        this.x -= dx / 15;
+                    }
+                    if (this.y !== this.baseY) {
+                        let dy = this.y - this.baseY;
+                        this.y -= dy / 15;
+                    }
+                }
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(56, 189, 248, 0.4)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            let numberOfParticles = (width * height) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+        initParticles();
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+
+        // --- 2. ADVANCED DRAG & MOMENTUM PHYSICS FOR CARDS ---
         const cards = document.querySelectorAll('.draggable-card');
 
         cards.forEach(card => {
             let isDragging = false;
             let startX, startY;
-            let currentX = 0;
-            let currentY = 0;
+            let currentX = 0, currentY = 0;
+            let targetX = 0, targetY = 0;
+            let velocityX = 0, velocityY = 0;
+            let lastMouseX = 0, lastMouseY = 0;
 
             card.addEventListener('mousedown', (e) => {
                 isDragging = true;
-                startX = e.clientX - currentX;
-                startY = e.clientY - currentY;
+                startX = e.clientX - targetX;
+                startY = e.clientY - targetY;
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
                 card.style.zIndex = 1000;
+                card.style.transition = 'none';
             });
 
             window.addEventListener('mousemove', (e) => {
                 if (!isDragging) return;
-                currentX = e.clientX - startX;
-                currentY = e.clientY - startY;
-                card.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                
+                targetX = e.clientX - startX;
+                targetY = e.clientY - startY;
+
+                velocityX = e.clientX - lastMouseX;
+                velocityY = e.clientY - lastMouseY;
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+
+                // Dynamic tilt effect based on movement speed
+                let tiltX = velocityY * 0.4;
+                let tiltY = -velocityX * 0.4;
+
+                card.style.transform = `translate(${targetX}px, ${targetY}px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.03)`;
             });
 
             window.addEventListener('mouseup', () => {
+                if (!isDragging) return;
                 isDragging = false;
-                card.style.zIndex = 1;
+                card.style.zIndex = 10;
+                card.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)'; // Spring bounce effect
+                
+                // Release with smooth dampening
+                targetX += velocityX * 4;
+                targetY += velocityY * 4;
+                card.style.transform = `translate(${targetX}px, ${targetY}px) rotateX(0deg) rotateY(0deg) scale(1)`;
+                currentX = targetX;
+                currentY = targetY;
             });
 
-            // Touch support for mobile/tablets
+            // Touch support
             card.addEventListener('touchstart', (e) => {
                 isDragging = true;
-                startX = e.touches[0].clientX - currentX;
-                startY = e.touches[0].clientY - currentY;
+                startX = e.touches[0].clientX - targetX;
+                startY = e.touches[0].clientY - targetY;
                 card.style.zIndex = 1000;
+                card.style.transition = 'none';
             });
 
             window.addEventListener('touchmove', (e) => {
                 if (!isDragging) return;
-                currentX = e.touches[0].clientX - startX;
-                currentY = e.touches[0].clientY - startY;
-                card.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                targetX = e.touches[0].clientX - startX;
+                targetY = e.touches[0].clientY - startY;
+                card.style.transform = `translate(${targetX}px, ${targetY}px) scale(1.03)`;
             }, { passive: true });
 
             window.addEventListener('touchend', () => {
+                if (!isDragging) return;
                 isDragging = false;
-                card.style.zIndex = 1;
+                card.style.zIndex = 10;
+                card.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                card.style.transform = `translate(${targetX}px, ${targetY}px) scale(1)`;
             });
         });
     </script>
-
 </body>
 </html>
