@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OC Networks LLC | Strategic IT & Infrastructure</title>
-    <!-- Modern clean typography -->
+    <title>OC Networks LLC | Portfolio & Infrastructure</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,7 +12,6 @@
             --text-primary: #fafafa;
             --text-secondary: #a1a1aa;
             --border: #27272a;
-            --accent: #f43f5e; /* Sleek minimalist accent */
         }
 
         * {
@@ -26,12 +24,12 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
             color: var(--text-primary);
-            line-height: 1.7;
-            padding: 0 1.5rem;
+            line-height: 1.6;
+            padding: 0 2rem;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -47,9 +45,13 @@
         .logo {
             font-weight: 600;
             font-size: 1.1rem;
-            letter-spacing: -0.01em;
             color: var(--text-primary);
             text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
         }
 
         nav a {
@@ -64,81 +66,52 @@
         }
 
         .hero {
-            padding: 2rem 0 5rem 0;
+            padding: 2rem 0 4rem 0;
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
             font-weight: 400;
             letter-spacing: -0.03em;
-            line-height: 1.2;
+            line-height: 1.1;
             margin-bottom: 1.5rem;
-            color: var(--text-primary);
         }
 
         .hero h1 span {
             color: var(--text-secondary);
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin-bottom: 2.5rem;
-            font-weight: 300;
-        }
-
-        .contact-btn {
-            display: inline-block;
-            background-color: var(--text-primary);
-            color: var(--bg);
-            font-weight: 500;
-            padding: 0.8rem 1.75rem;
-            border-radius: 4px;
-            text-decoration: none;
-            transition: opacity 0.2s;
-        }
-
-        .contact-btn:hover {
-            opacity: 0.9;
-        }
-
-        .section-title {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-        }
-
-        .work-grid {
+        /* Dynamic Media/Portfolio Grid Layout */
+        .gallery-grid {
             display: grid;
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
             margin-bottom: 6rem;
         }
 
-        .work-item {
+        .gallery-item {
             background-color: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 2.5rem;
-            transition: border-color 0.2s;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+            aspect-ratio: 4/3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
 
-        .work-item:hover {
+        .gallery-item:hover {
             border-color: #3f3f46;
+            transform: translateY(-4px);
         }
 
-        .work-item h3 {
-            font-size: 1.3rem;
-            font-weight: 500;
-            margin-bottom: 0.75rem;
-        }
-
-        .work-item p {
+        .gallery-placeholder {
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            font-weight: 300;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 1rem;
         }
 
         footer {
@@ -148,6 +121,7 @@
             justify-content: space-between;
             color: var(--text-secondary);
             font-size: 0.85rem;
+            margin-bottom: 2rem;
         }
 
         @media (max-width: 600px) {
@@ -164,33 +138,38 @@
         <header>
             <a href="#" class="logo">OC Networks LLC</a>
             <nav>
-                <a href="mailto:ocnetworksllc@gmail.com">Get in Touch</a>
+                <a href="#videos">Videos</a>
+                <a href="#photos">Photos</a>
+                <a href="mailto:ocnetworksllc@gmail.com">About</a>
             </nav>
         </header>
 
         <main>
             <section class="hero">
-                <h1>Architecting secure infrastructure. <span>Delivering modern solutions.</span></h1>
-                <p>We specialize in enterprise IT architecture, robust cybersecurity frameworks, and scalable technical operations for growing businesses.</p>
-                <a href="mailto:ocnetworksllc@gmail.com" class="contact-btn">Start a Conversation</a>
+                <h1>Visualizing infrastructure. <span>Curated works & projects.</span></h1>
             </section>
 
-            <div class="section-title">Core Capabilities</div>
-            
-            <section class="work-grid">
-                <div class="work-item">
-                    <h3>Infrastructure & Cloud Systems</h3>
-                    <p>Designing resilient, high-availability networks and modern cloud environments tailored to your exact operational requirements.</p>
+            <div class="gallery-grid" id="photos">
+                <!-- Replace these blocks with your images or video embeds later -->
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">Project Showcase 01</div>
                 </div>
-                <div class="work-item">
-                    <h3>Cybersecurity & Defense</h3>
-                    <p>Implementing proactive security layers, compliance frameworks, and continuous risk assessment to protect critical assets.</p>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">Hardware Setup 02</div>
                 </div>
-                <div class="work-item">
-                    <h3>Managed IT Engineering</h3>
-                    <p>Comprehensive technical support, systems oversight, and seamless hardware deployment to keep your teams performing efficiently.</p>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">Network Topology 03</div>
                 </div>
-            </section>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">Field Operations 04</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">Systems Deploy 05</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">Infrastructure 06</div>
+                </div>
+            </div>
         </main>
 
         <footer>
