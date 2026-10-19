@@ -139,22 +139,23 @@
             font-weight: 600;
         }
 
-        /* Ambient Pulsing Watermark */
+       /* Ambient Pulsing Watermark */
         .watermark {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: clamp(3rem, 10vw, 9rem);
+            font-size: clamp(2rem, 7vw, 7.5rem); /* Adjusted size to prevent wide wrapping */
             font-weight: 300;
             color: rgba(255, 255, 255, 0.015);
             pointer-events: none;
             text-align: center;
             letter-spacing: -0.04em;
+            white-space: nowrap; /* Forces text to stay on a single line */
             z-index: 2;
             animation: pulseGlow 6s ease-in-out infinite alternate;
         }
-
+        
         @keyframes pulseGlow {
             0% { opacity: 0.5; text-shadow: 0 0 20px rgba(56,189,248,0); }
             100% { opacity: 1; text-shadow: 0 0 60px rgba(56,189,248,0.15); }
